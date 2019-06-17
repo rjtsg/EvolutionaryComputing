@@ -20,10 +20,11 @@ solopt = rosen(Xopt)
 N = 100 #population size
 a = -1 #lower starting bound
 b = 3  #upper starting bound
-gen = 4 #Specify how many generations you want to have
-Exec = 10000 #number of executions of the algorithm
+gen = 3 #Specify how many generations you want to have
+Exec = 10 #number of executions of the algorithm
 Fraction = 0.5 #Fraction of the parents dies
 NM = 5 #Amount of members that undergo a mutation
+Scaling = 1.25 #Border scaling parameter
 # %% Write here the needed storage modules
 members = np.empty((N,4))
 frosen = np.empty((N))
@@ -35,10 +36,24 @@ BestEvalOriginal = np.empty((gen))
 BestEvalNew = np.empty((gen))
 MeanEvalOriginal = np.empty((gen))
 MeanEvalNew = np.empty((gen))
-#BestEvalOriginalComp = np.empty((gen))
 BestEvalNewComp = np.empty((gen))
-#MeanEvalOriginalComp = np.empty((gen))
 MeanEvalNewComp = np.empty((gen))
+BestMatOriginal = np.empty((Exec,gen))
+BestMatNew = np.empty((Exec,gen))
+MeanMatOriginal = np.empty((Exec,gen))
+MeanMatNew = np.empty((Exec,gen))
+BestMatNewComp = np.empty((Exec,gen))
+MeanMatNewComp = np.empty((Exec,gen))
+AvBestOriginal = np.empty((gen))
+AvBestNew = np.empty((gen))
+AvMeanOriginal = np.empty((gen))
+AvMeanNew = np.empty((gen))
+AvBestNewComp = np.empty((gen))
+AvMeanNewComp = np.empty((gen))
+B  = np.empty((gen))
+W  = np.empty((gen))
+
+
 Executions = np.empty((Exec))
 Generations = np.empty((gen))
 
@@ -137,40 +152,6 @@ NewMembers = ReproductionLife(Parent1,Parent2,Fraction)
 MutatedMembers = MutationXX(NewMembers,NM,a,b)
 members1,OriginalMembers = RunEvolution(N,a,b,gen)
 members2,OriginalMembers2 = BaseEvolution(members,gen)    
-# %%The for loop that runs for several generations
-
-#members = InitialPopulation(N,a,b)
-#print('lowest value for rosenbrock before evolution: ',np.amin(PopEval(members)))
-#for i in range(gen):
-#    frosen = PopEval(members)
-#    Parent1,Parent2 = ParentSelection(members,frosen)
-#    members = Reproduction(Parent1,Parent2)
-#
-#print('lowest value for rosenbrock after evolution: ', np.amin(PopEval(members)))
-
-# %%Write a loop that uses RunEvolution to visualise what happens over a amount
-# of executions
-
-#for i in range(Exec):
-#    NewMembers,OriginalMembers = RunEvolution(N,a,b,gen)
-#    BestEvalOriginal[i] = np.amin(PopEval(OriginalMembers))
-#    BestEvalNew[i] = np.amin(PopEval(NewMembers))
-#    MeanEvalOriginal[i] = np.mean(PopEval(OriginalMembers))
-#    MeanEvalNew[i] = np.mean(PopEval(NewMembers))
-#    Executions[i] = i 
-#
-#plt.figure(0)
-#plt.plot(Executions,BestEvalOriginal)
-#plt.plot(Executions,BestEvalNew)
-#plt.legend(['Original','New'])
-#plt.figure(1)
-#plt.plot(Executions,MeanEvalOriginal)
-#plt.plot(Executions,MeanEvalNew)
-#plt.legend(['Original','New'])
-#plt.figure(2)
-#plt.plot(Executions,BestEvalOriginal-BestEvalNew)
-#plt.figure(3)
-#plt.plot(Executions,MeanEvalOriginal-MeanEvalNew)
 
 # %% Look what the influence is of a amount of generations 
 
@@ -203,3 +184,34 @@ plt.title('Mean ReproductionLife')
 
 print('After: %.f generations f(x) = %.2f, compared to the theoretical value 0' % (10**(gen-1), np.amin(PopEval(NewMembers))))
 print('After: %.f generations the mean f(x) = %.2f, compared to the theoretical value 0' % (10**(gen-1), np.mean(PopEval(NewMembers))))
+
+# %% Uncertainty quantification
+for j in range(Exec):
+    members = InitialPopulation(N,a,b)
+    for i in range(gen):
+        NewMembers,OriginalMembers = BaseEvolution(members,10**i)
+        BestMatOriginal[j,i] = np.amin(PopEval(OriginalMembers))
+        BestMatNew[j,i] = np.amin(PopEval(NewMembers))
+        MeanMatOriginal[j,i] = np.mean(PopEval(OriginalMembers))
+        MeanMatNew[j,i] = np.mean(PopEval(NewMembers))
+        Generations[i] = 10**i
+        NewMembersComp,OriginalMembersComp = BaseEvolutionComp(members,10**i)
+        BestMatNewComp[j,i] = np.amin(PopEval(NewMembersComp))
+        MeanMatNewComp[j,i] = np.mean(PopEval(NewMembersComp))
+        AvBestOriginal[i] = np.mean(BestMatOriginal[:,i])
+        AvBestNew[i] = np.mean(BestMatNew[:,i])
+        AvMeanOriginal[i] = np.mean(MeanMatOriginal[:,i])
+        AvMeanNew[i] = np.mean(MeanMatNew[:,i])
+        AvBestNewComp[i] = np.mean(BestMatNewComp[:,i])
+        AvMeanNewComp[i] = np.mean(MeanMatNewComp[:,i])
+        B[i] = np.amin(BestMatNew[:,i])
+        W[i] = np.amax(BestMatNew[:,i])
+
+plt.figure(2)
+#plt.plot(Generations,AvBestOriginal)
+plt.plot(Generations,AvBestNew)
+plt.fill_between(Generations,B,W,alpha=0.5)
+plt.plot(Generations,AvBestNewComp)
+
+plt.title('Average values over %.f Executions' % Exec)
+plt.legend(['Original','MutationBorderScaling','MutationXX'])
