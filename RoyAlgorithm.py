@@ -93,6 +93,15 @@ def MutationXX(Members,NM,a,b):
         MutatedMembers[i,gene] = Mutation
     return MutatedMembers
 
+def MutationBorderScale(Members,NM,Scaling):
+    GenesForMutation = np.random.randint(0,len(Members),NM)
+    MutatedMembers = np.copy(Members)
+    for i in GenesForMutation:
+        gene = np.random.randint(0,len(Members[GenesForMutation])-1,1)
+        Mutation = np.random.uniform(np.amin(Members)*Scaling,np.amax(Members)*Scaling,1)
+        MutatedMembers[i,gene] = Mutation
+    return MutatedMembers
+
 def RunEvolution(N,a,b,gen):
     members1 = InitialPopulation(N,a,b)
     OriginalMembers = members1
@@ -108,7 +117,7 @@ def BaseEvolution(base,gen):
         frosen = PopEval(base)
         Parent1,Parent2 = ParentSelection(base,frosen)
         base = ReproductionLife(Parent1,Parent2,Fraction)
-        base = MutationXX(base,NM,a,b)
+        base = MutationBorderScale(base,NM,Scaling)
     return base,OriginalMembers #note that here base is the new population...
 
 def BaseEvolutionComp(base,gen):
@@ -117,7 +126,7 @@ def BaseEvolutionComp(base,gen):
         frosen = PopEval(base)
         Parent1,Parent2 = ParentSelection(base,frosen)
         base = ReproductionLife(Parent1,Parent2,Fraction)
-        #base = MutationXX(base,NM,a,b)
+        base = MutationXX(base,NM,a,b)
     return base,OriginalMembers #note that here base is the new population...
 
 # %% Call here the functions
@@ -184,12 +193,12 @@ plt.plot(Generations,BestEvalNew)
 plt.plot(Generations,BestEvalOriginal)
 plt.plot(Generations,BestEvalNewComp)
 plt.title('Best ReproductionLife')
-plt.legend(['Mutation','Original','No mutation'])
+plt.legend(['MutationBorderScaling','Original','MutationXX'])
 plt.figure(1)
 plt.plot(Generations,MeanEvalNew)
 plt.plot(Generations,MeanEvalOriginal)
 plt.plot(Generations,MeanEvalNewComp)
-plt.legend(['Mutation','Original','No mutation'])
+plt.legend(['MutationBorderScaling','Original','MutationXX'])
 plt.title('Mean ReproductionLife')
 
 print('After: %.f generations f(x) = %.2f, compared to the theoretical value 0' % (10**(gen-1), np.amin(PopEval(NewMembers))))
