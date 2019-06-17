@@ -20,7 +20,7 @@ solopt = rosen(Xopt)
 N = 100 #population size
 a = -1 #lower starting bound
 b = 3  #upper starting bound
-gen = 3 #Specify how many generations you want to have
+gen = 4 #Specify how many generations you want to have
 Exec = 10 #number of executions of the algorithm
 Fraction = 0.5 #Fraction of the parents dies
 NM = 5 #Amount of members that undergo a mutation
@@ -154,6 +154,8 @@ members1,OriginalMembers = RunEvolution(N,a,b,gen)
 members2,OriginalMembers2 = BaseEvolution(members,gen)    
 
 # %% Look what the influence is of a amount of generations 
+#Use this part to try to get a quick understanding if the newly formed code
+#works better than the previous one.
 
 for i in range(gen):
     NewMembers,OriginalMembers = BaseEvolution(members,10**i)
@@ -186,6 +188,9 @@ print('After: %.f generations f(x) = %.2f, compared to the theoretical value 0' 
 print('After: %.f generations the mean f(x) = %.2f, compared to the theoretical value 0' % (10**(gen-1), np.mean(PopEval(NewMembers))))
 
 # %% Uncertainty quantification
+#Use this code to evaluate the newly written code over multiple executions
+#only that way we can be sure that the code is really improving. 
+
 for j in range(Exec):
     members = InitialPopulation(N,a,b)
     for i in range(gen):
@@ -204,14 +209,21 @@ for j in range(Exec):
         AvMeanNew[i] = np.mean(MeanMatNew[:,i])
         AvBestNewComp[i] = np.mean(BestMatNewComp[:,i])
         AvMeanNewComp[i] = np.mean(MeanMatNewComp[:,i])
-        B[i] = np.amin(BestMatNew[:,i])
-        W[i] = np.amax(BestMatNew[:,i])
+        B[i] = np.amin(PopEval(NewMembers))
+        W[i] = np.amax(PopEval(NewMembers))
 
 plt.figure(2)
-#plt.plot(Generations,AvBestOriginal)
 plt.plot(Generations,AvBestNew)
-plt.fill_between(Generations,B,W,alpha=0.5)
+#plt.fill_between(Generations,B,W,alpha=0.5)
 plt.plot(Generations,AvBestNewComp)
+plt.title('Average best values over %.f Executions' % Exec)
+plt.legend(['MutationBorderScaling','MutationXX'])
 
+plt.figure(3)
+plt.plot(Generations,AvMeanNew)
+plt.plot(Generations,AvMeanNewComp)
 plt.title('Average values over %.f Executions' % Exec)
-plt.legend(['Original','MutationBorderScaling','MutationXX'])
+plt.legend(['MutationBorderScaling','MutationXX'])
+print('The average f(x) = %.3f after %.f Executions and %.f Generations' %(AvMeanNew[-1],Exec,10**(gen-1)))
+print('The minimum f(x) = %.3f after %.f Executions and %.f Generations' %(B[-1],Exec,10**(gen-1)))
+print('The maximum f(x) = %.3f after %.f Executions and %.f Generations' %(W[-1],Exec,10**(gen-1)))
