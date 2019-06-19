@@ -75,7 +75,7 @@ def MutationBorderScale(Members,NM,Scaling):
     GenesForMutation = np.random.randint(0,len(Members),NM)
     MutatedMembers = np.copy(Members)
     for i in GenesForMutation:
-        gene = np.random.randint(0,len(Members[GenesForMutation])-1,1)
+        gene = np.random.randint(0,len(Members[0]),1)
         Mutation = np.random.uniform(np.amin(Members)*Scaling,np.amax(Members)*Scaling,1)
         MutatedMembers[i,gene] = Mutation
     return MutatedMembers

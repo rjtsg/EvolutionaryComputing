@@ -16,11 +16,11 @@ b = 3  #upper starting bound
 gen = 3 #Specify how many generations you want to have
 Exec = 10 #number of executions of the algorithm
 Fraction = 0.5 #Fraction of the parents dies
-NM = 5 #Amount of members that undergo a mutation
+NM = 10 #Amount of members that undergo a mutation
 Scaling = 1.25 #Border scaling parameter
-tol = 0.5  #the tolerance limit
-limit = 1000 #the upper limit of generations
-stop = 100 #after how many same numbers it should stop make large if you do not want this
+tol = 0.1  #the tolerance limit
+limit = 100000 #the upper limit of generations
+stop = 1000000 #after how many same numbers it should stop make large if you do not want this
 ## %% Call here the functions
 #members = FF.InitialPopulation(N,a,b)
 #frosen = FF.PopEval(members)
