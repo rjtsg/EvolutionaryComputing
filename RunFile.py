@@ -20,6 +20,7 @@ NM = 5 #Amount of members that undergo a mutation
 Scaling = 1.25 #Border scaling parameter
 tol = 0.5  #the tolerance limit
 limit = 1000 #the upper limit of generations
+stop = 100 #after how many same numbers it should stop make large if you do not want this
 ## %% Call here the functions
 #members = FF.InitialPopulation(N,a,b)
 #frosen = FF.PopEval(members)
@@ -34,5 +35,5 @@ limit = 1000 #the upper limit of generations
 #output2 = EF.UQ(Exec,gen,N,a,b,Fraction,NM,Scaling)
 
 # %% Call here the optimization function
-Minimum = SF.Minimize(tol,limit,N,a,b,Fraction,NM,Scaling)
+Minimum = SF.Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling)
 print(Minimum)

@@ -19,14 +19,14 @@ import numpy as np
 #NM = 5 #Amount of members that undergo a mutation
 #Scaling = 1.25 #Border scaling parameter
 
-def Minimize(tol,limit,N,a,b,Fraction,NM,Scaling):
+def Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling):
     gen = 0 #keep track of the number of generations that passed
     members = FF.InitialPopulation(N,a,b)
     frosen = FF.PopEval(members)
     frosenBest = np.amin(frosen)
     fp100 = frosenBest
     f = 0
-    p100 = 100
+    p100 = stop
     while frosenBest > tol and gen < limit:
         PreviousBest = frosenBest
         Parent1,Parent2 = FF.ParentSelection(members,frosen)
@@ -42,8 +42,16 @@ def Minimize(tol,limit,N,a,b,Fraction,NM,Scaling):
         if gen == p100:
             f = fp100
             fp100 = frosenBest
-            p100 +=100
+            p100 += stop
             if fp100 - f == 0:
                 print('The function has not changed in 100 generations')
+                print('Do you want to continue (y/n)')
+                a = input()
+                if a == 'y':
+                    a = 1
+                elif a == 'n':
+                    return print('User stopped program')
+                else:
+                    print('I will continue')
         
     return minimum
