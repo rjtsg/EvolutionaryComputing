@@ -24,6 +24,9 @@ def Minimize(tol,limit,N,a,b,Fraction,NM,Scaling):
     members = FF.InitialPopulation(N,a,b)
     frosen = FF.PopEval(members)
     frosenBest = np.amin(frosen)
+    fp100 = frosenBest
+    f = 0
+    p100 = 100
     while frosenBest > tol and gen < limit:
         PreviousBest = frosenBest
         Parent1,Parent2 = FF.ParentSelection(members,frosen)
@@ -34,5 +37,13 @@ def Minimize(tol,limit,N,a,b,Fraction,NM,Scaling):
         Index = np.where(frosen == np.amin(frosen))
         minimum = members[Index[0][0]]
         gen +=1
-        print('Generation: %.f, f(x) = %.3f, df(x) = %.3f' % (gen,frosenBest,frosenBest-PreviousBest))
+        if gen%5 == 0:
+            print('Generation: %.f, f(x) = %.3f, df(x) = %.3f' % (gen,frosenBest,frosenBest-PreviousBest))
+        if gen == p100:
+            f = fp100
+            fp100 = frosenBest
+            p100 +=100
+            if fp100 - f == 0:
+                print('The function has not changed in 100 generations')
+        
     return minimum

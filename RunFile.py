@@ -19,7 +19,7 @@ Fraction = 0.5 #Fraction of the parents dies
 NM = 5 #Amount of members that undergo a mutation
 Scaling = 1.25 #Border scaling parameter
 tol = 0.5  #the tolerance limit
-limit = 10000 #the upper limit of generations
+limit = 1000 #the upper limit of generations
 ## %% Call here the functions
 #members = FF.InitialPopulation(N,a,b)
 #frosen = FF.PopEval(members)
