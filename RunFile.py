@@ -33,9 +33,9 @@ members1,OriginalMembers = FF.RunEvolution(N,a,b,gen,Fraction)
 members2,OriginalMembers2 = FF.BaseEvolution(members,gen,Fraction,NM,a,b,Scale)
 
 # %% Call here evaluation files
-output1 = EF.QuickComparison(gen,members,Fraction,NM,Scaling,a,b,Scale)
-output2 = EF.UQ(Exec,gen,N,a,b,Fraction,NM,Scaling,Scale)
+#output1 = EF.QuickComparison(gen,members,Fraction,NM,Scaling,a,b,Scale)
+#output2 = EF.UQ(Exec,gen,N,a,b,Fraction,NM,Scaling,Scale)
 
 # %% Call here the optimization function
-#Minimum = SF.Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling)
+Minimum = SF.Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling,Scale)
 #print(Minimum)

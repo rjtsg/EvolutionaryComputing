@@ -19,7 +19,7 @@ import numpy as np
 #NM = 5 #Amount of members that undergo a mutation
 #Scaling = 1.25 #Border scaling parameter
 
-def Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling):
+def Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling,Scale):
     gen = 0 #keep track of the number of generations that passed
     members = FF.InitialPopulation(N,a,b)
     frosen = FF.PopEval(members)
@@ -31,7 +31,7 @@ def Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling):
         PreviousBest = frosenBest
         Parent1,Parent2 = FF.ParentSelection(members,frosen)
         members = FF.Reproduction4(Parent1,Parent2)
-        members = FF.MutationXX(members,NM,a,b)
+        members = FF.Mutation2(members,NM,Scale)
         frosen = FF.PopEval(members)
         frosenBest = np.amin(frosen)
         Index = np.where(frosen == np.amin(frosen))
