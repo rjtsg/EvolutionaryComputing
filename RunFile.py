@@ -16,7 +16,7 @@ b = 3  #upper starting bound
 gen = 4 #Specify how many generations you want to have
 Exec = 100 #number of executions of the algorithm
 Fraction = 0.5 #Fraction of the parents dies
-NM = 5 #Amount of members that undergo a mutation
+NM = 10 #Amount of members that undergo a mutation
 Scaling = 1.25 #Border scaling parameter #see below this might be wrong now...
 #for both it should be addaptable if -number use 1.25 if + use 0.75
 Scale = 0.25 #Scale for Mutation2 up side (1+scale) low side (1-scale)
