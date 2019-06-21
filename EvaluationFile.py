@@ -19,7 +19,7 @@ def QuickComparison(gen,members,Fraction,NM,Scaling,a,b):
     MeanEvalNewComp = np.empty((gen))
     Generations = np.empty((gen))
     for i in range(gen):
-        NewMembers,OriginalMembers = FF.BaseEvolution(members,10**i,Fraction,NM,Scaling)
+        NewMembers,OriginalMembers = FF.BaseEvolution(members,10**i,Fraction,NM,a,b)
         BestEvalOriginal[i] = np.amin(FF.PopEval(OriginalMembers))
         BestEvalNew[i] = np.amin(FF.PopEval(NewMembers))
         MeanEvalOriginal[i] = np.mean(FF.PopEval(OriginalMembers))
@@ -37,12 +37,12 @@ def QuickComparison(gen,members,Fraction,NM,Scaling,a,b):
     plt.plot(Generations,BestEvalOriginal)
     plt.plot(Generations,BestEvalNewComp)
     plt.title('Best ReproductionLife')
-    plt.legend(['MutationBorderScaling','Original','MutationXX'])
+    plt.legend(['Reproduction4','Original','ReproductionLife'])
     plt.figure(1)
     plt.plot(Generations,MeanEvalNew)
     plt.plot(Generations,MeanEvalOriginal)
     plt.plot(Generations,MeanEvalNewComp)
-    plt.legend(['MutationBorderScaling','Original','MutationXX'])
+    plt.legend(['Reproduction4','Original','ReproductionLife'])
     plt.title('Mean ReproductionLife')
     
     print('After: %.f generations f(x) = %.2f, compared to the theoretical value 0' % (10**(gen-1), np.amin(FF.PopEval(NewMembers))))
@@ -70,7 +70,7 @@ def UQ(Exec,gen,N,a,b,Fraction,NM,Scaling):
     for j in range(Exec):
         members = FF.InitialPopulation(N,a,b)
         for i in range(gen):
-            NewMembers,OriginalMembers = FF.BaseEvolution(members,10**i,Fraction,NM,Scaling)
+            NewMembers,OriginalMembers = FF.BaseEvolution(members,10**i,Fraction,NM,a,b)
             BestMatOriginal[j,i] = np.amin(FF.PopEval(OriginalMembers))
             BestMatNew[j,i] = np.amin(FF.PopEval(NewMembers))
             MeanMatOriginal[j,i] = np.mean(FF.PopEval(OriginalMembers))
@@ -93,13 +93,13 @@ def UQ(Exec,gen,N,a,b,Fraction,NM,Scaling):
     #plt.fill_between(Generations,B,W,alpha=0.5)
     plt.plot(Generations,AvBestNewComp)
     plt.title('Average best values over %.f Executions' % Exec)
-    plt.legend(['MutationBorderScaling','MutationXX'])
+    plt.legend(['Reproduction4','ReproductionLife'])
     
     plt.figure(3)
     plt.plot(Generations,AvMeanNew)
     plt.plot(Generations,AvMeanNewComp)
     plt.title('Average values over %.f Executions' % Exec)
-    plt.legend(['MutationBorderScaling','MutationXX'])
+    plt.legend(['Reproduction4','ReproductionLife'])
     print('The average f(x) = %.3f after %.f Executions and %.f Generations' %(AvMeanNew[-1],Exec,10**(gen-1)))
     print('The minimum f(x) = %.3f after %.f Executions and %.f Generations' %(B[-1],Exec,10**(gen-1)))
     print('The maximum f(x) = %.3f after %.f Executions and %.f Generations' %(W[-1],Exec,10**(gen-1)))

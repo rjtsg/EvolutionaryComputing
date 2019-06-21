@@ -30,8 +30,8 @@ def Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling):
     while frosenBest > tol and gen < limit:
         PreviousBest = frosenBest
         Parent1,Parent2 = FF.ParentSelection(members,frosen)
-        members = FF.ReproductionLife(Parent1,Parent2,Fraction)
-        members = FF.MutationBorderScale(members,NM,Scaling)
+        members = FF.Reproduction4(Parent1,Parent2)
+        members = FF.MutationXX(members,NM,a,b)
         frosen = FF.PopEval(members)
         frosenBest = np.amin(frosen)
         Index = np.where(frosen == np.amin(frosen))
