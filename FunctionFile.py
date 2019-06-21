@@ -89,13 +89,13 @@ def RunEvolution(N,a,b,gen,Fraction):
         members1 = ReproductionLife(Parent1,Parent2,Fraction)
     return members1,OriginalMembers
 
-def BaseEvolution(base,gen,Fraction,NM,a,b):
+def BaseEvolution(base,gen,Fraction,NM,a,b,Scale):
     OriginalMembers = base
     for i in range(gen):
         frosen = PopEval(base)
         Parent1,Parent2 = ParentSelection(base,frosen)
-        base = Reproduction4(Parent1,Parent2)
-        base = MutationXX(base,NM,a,b)
+        base = ReproductionLife(Parent1,Parent2,Fraction)
+        base = Mutation2(base,NM,Scale)
     return base,OriginalMembers #note that here base is the new population...
 
 def BaseEvolutionComp(base,gen,Fraction,NM,a,b):
@@ -134,3 +134,32 @@ def Reproduction4(Parent1,Parent2):
         if b100 == 100:
             break
     return BestNewMembers
+
+def Mutation2(Members,NM,Scale):
+    GenesForMutation = np.random.randint(0,len(Members),NM)
+    MutatedMembers = np.copy(Members)
+
+    for i in GenesForMutation:
+        gene = np.random.randint(0,len(Members[0]),1)
+        if Members[i,gene] >= 0:
+            MutationP = np.random.uniform(Members[i,gene],Members[i,gene]*(1+Scale),1)
+            MutationM = np.random.uniform(Members[i,gene]*(1-Scale),Members[i,gene],1)
+        else:
+            MutationP = np.random.uniform(Members[i,gene],Members[i,gene]*(1-Scale),1)
+            MutationM = np.random.uniform(Members[i,gene]*(1+Scale),Members[i,gene],1)
+        MutatedP = MutatedMembers[i]
+        MutatedP[gene] = MutationP
+        frosenP = rosen(MutatedP)
+        #print(frosenP)
+        MutatedM = MutatedMembers[i]
+        MutatedM[gene] = MutationM
+        frosenM = rosen(MutatedM)
+        #print(frosenM)
+        if frosenP >= frosenM:
+            MutatedMembers[i,gene] = MutationM
+            #print(rosen(MutatedMembers[i]))
+        if frosenM > frosenP:
+            MutatedMembers[i,gene] = MutationP
+            #print(rosen(MutatedMembers[i]))
+        
+    return MutatedMembers
