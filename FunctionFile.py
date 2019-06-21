@@ -122,11 +122,15 @@ def Reproduction4(Parent1,Parent2):
     NewMembers = np.append(Kid1,Kid2,0)
     NewMembers = np.append(NewMembers,Kid3,0)
     NewMembers = np.append(NewMembers,Kid4,0)
+    NewMembers = np.append(NewMembers,Parent1,0)
+    NewMembers = np.append(NewMembers,Parent2,0)
     frosen = PopEval(NewMembers)
     for i in range(len(NewMembers)):
         Index1 = np.where(frosen == np.amin(frosen))
         BestNewMembers[i] = NewMembers[Index1[0][0]]
+        frosen = np.delete(frosen,Index1[0][0])
+        NewMembers = np.delete(NewMembers,Index1[0][0],0)
         b100 +=1
-        if b100 == 99:
+        if b100 == 100:
             break
     return BestNewMembers

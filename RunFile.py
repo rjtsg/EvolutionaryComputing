@@ -19,7 +19,7 @@ Fraction = 0.5 #Fraction of the parents dies
 NM = 10 #Amount of members that undergo a mutation
 Scaling = 1.25 #Border scaling parameter
 tol = 0.1  #the tolerance limit
-limit = 100000 #the upper limit of generations
+limit = 10000 #the upper limit of generations
 stop = 1000000 #after how many same numbers it should stop make large if you do not want this
 # %% Call here the functions
 members = FF.InitialPopulation(N,a,b)
@@ -31,9 +31,9 @@ members1,OriginalMembers = FF.RunEvolution(N,a,b,gen,Fraction)
 members2,OriginalMembers2 = FF.BaseEvolution(members,gen,Fraction,NM,a,b)
 
 # %% Call here evaluation files
-output1 = EF.QuickComparison(gen,members,Fraction,NM,Scaling,a,b)
-output2 = EF.UQ(Exec,gen,N,a,b,Fraction,NM,Scaling)
+#output1 = EF.QuickComparison(gen,members,Fraction,NM,Scaling,a,b)
+#output2 = EF.UQ(Exec,gen,N,a,b,Fraction,NM,Scaling)
 
 # %% Call here the optimization function
-#Minimum = SF.Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling)
+Minimum = SF.Minimize(tol,limit,stop,N,a,b,Fraction,NM,Scaling)
 #print(Minimum)
